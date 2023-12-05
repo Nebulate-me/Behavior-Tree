@@ -1,4 +1,4 @@
-# Behaviour Tree
+# Behavior Tree
 
 AI Classes and Tools to create configurable artificial intelligence for Unity based on Behavior Trees
 
