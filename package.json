@@ -1,0 +1,23 @@
+﻿{
+  "name": "com.nebulateme.behaviortree",
+  "version": "1.0.0",
+  "displayName": "Beahvior Tree",
+  "description": "AI Behavior Tree for Unity",
+  "unity": "2020.3",
+  "unityRelease": "42f1",
+  "documentationUrl": "https://github.com/Nebulate-me/Behavior-Tree",
+  "changelogUrl": "https://github.com/Nebulate-me/Behavior-Tree",
+  "licensesUrl": "https://github.com/Nebulate-me/Behavior-Tree/blob/main/LICENSE",
+  "dependencies": {
+  },
+  "keywords": [
+    "behavior tree",
+    "ai",
+    "unity"
+  ],
+  "author": {
+    "name": "Nebulate.me",
+    "email": "admin@nebulate.me",
+    "url": "https://nebulate.me"
+  }
+}
