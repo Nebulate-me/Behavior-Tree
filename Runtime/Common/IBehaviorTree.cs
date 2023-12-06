@@ -1,4 +1,4 @@
-namespace BehaviorTree
+namespace BehaviorTree.Common
 {
     public interface IBehaviorTree
     {

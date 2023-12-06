@@ -5,32 +5,32 @@ namespace BehaviorTree
     public class Sequence : Node
     {
         public Sequence() : base() { }
-        public Sequence(List<Node> children) : base(children) { }
+        public Sequence(List<INode> children) : base(children) { }
 
         public override NodeState Evaluate()
         {
             var anyChildIsRunning = false;
 
-            foreach (Node node in children)
+            foreach (var node in Children)
             {
                 switch (node.Evaluate())
                 {
                     case NodeState.Failure:
-                        state = NodeState.Failure;
-                        return state;
+                        State = NodeState.Failure;
+                        return State;
                     case NodeState.Success:
                         continue;
                     case NodeState.Running:
                         anyChildIsRunning = true;
                         continue;
                     default:
-                        state = NodeState.Success;
-                        return state;
+                        State = NodeState.Success;
+                        return State;
                 }
             }
 
-            state = anyChildIsRunning ? NodeState.Running : NodeState.Success;
-            return state;
+            State = anyChildIsRunning ? NodeState.Running : NodeState.Success;
+            return State;
         }
 
     }

@@ -2,18 +2,18 @@
 {
     public abstract class BaseBehaviorTree : IBehaviorTree
     {
-        protected Node rootNode;
+        protected Node RootNode;
 
         public void InitTree()
         {
-            rootNode = CreateTree();
+            RootNode = CreateTree();
         }
 
         public abstract Node CreateTree();
 
         public virtual void Evaluate()
         {
-            rootNode.Evaluate();
+            RootNode.Evaluate();
         }
     }
 }

@@ -31,10 +31,5 @@ namespace BehaviorTree.Common
 
             return rotatedPattern;
         }
-
-        private static void TestRotatePattern()
-        {
-            
-        }
     }
 }

@@ -4,7 +4,9 @@ AI Classes and Tools to create configurable artificial intelligence for Unity ba
 
 ### How to use
 
-TBD
+See `EnemyAICalculationState` and `EnemyAICalculationResultType` classes. They are samples to be used in order to realize your own AI states and types.
+
+Also, see `Node` base class, as well as `Sequence` and `Selector` inheritors, so you could implement your own `building blocks for the Behavior Tree.
 
 ### How to install
 

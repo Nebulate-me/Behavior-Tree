@@ -5,29 +5,29 @@ namespace BehaviorTree
     public class Selector : Node
     {
         public Selector() : base() { }
-        public Selector(List<Node> children) : base(children) { }
+        public Selector(List<INode> children) : base(children) { }
 
         public override NodeState Evaluate()
         {
-            foreach (Node node in children)
+            foreach (Node node in Children)
             {
                 switch (node.Evaluate())
                 {
                     case NodeState.Failure:
                         continue;
                     case NodeState.Success:
-                        state = NodeState.Success;
-                        return state;
+                        State = NodeState.Success;
+                        return State;
                     case NodeState.Running:
-                        state = NodeState.Running;
-                        return state;
+                        State = NodeState.Running;
+                        return State;
                     default:
                         continue;
                 }
             }
 
-            state = NodeState.Failure;
-            return state;
+            State = NodeState.Failure;
+            return State;
         }
 
     }

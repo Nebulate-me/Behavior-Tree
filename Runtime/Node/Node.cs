@@ -1,31 +1,33 @@
 using System.Collections.Generic;
+using Utilities.Monads;
 
 namespace BehaviorTree
 {
     public class Node : INode
     {
-        protected NodeState state;
+        protected NodeState State;
 
-        public Node parent;
-        protected List<Node> children = new();
+        protected readonly List<INode> Children = new();
 
-        private Dictionary<string, object> _dataContext = new();
+        private readonly Dictionary<string, object> _dataContext = new();
+        
+        public IMaybe<INode> Parent { get; set; }
 
         public Node()
         {
-            parent = null;
+            Parent = Maybe.Empty<INode>();
         }
 
-        public Node(List<Node> children)
+        public Node(List<INode> children)
         {
             foreach (var child in children)
-                _Attach(child);
+                Attach(child);
         }
 
-        private void _Attach(Node node)
+        private void Attach(INode node)
         {
-            node.parent = this;
-            children.Add(node);
+            node.Parent = this.ToMaybe<INode>();
+            Children.Add(node);
         }
 
         public virtual NodeState Evaluate() => NodeState.Failure;
@@ -35,25 +37,30 @@ namespace BehaviorTree
             _dataContext[key] = value;
         }
 
-        public object GetData(string key)
+        public IMaybe<object> GetData(string key)
         {
-            object value = null;
-
-            if (_dataContext.TryGetValue(key, out value))
-                return value;
-
-            Node node = parent;
-            while (node != null)
-            {
-                value = node.GetData(key);
-                if (value != null)
-                    return value;
-                node = node.parent;
-            }
-
-            return null;
+            return _dataContext
+                .GetValueOrEmpty(key)
+                .Match(
+                    value => value.ToMaybe(),
+                    GetDataFromParents(key));
         }
 
+        /// <summary>
+        /// Searches parent nodes for Data recursively until they are over or the data is found
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public IMaybe<object> GetDataFromParents(string key)
+        {
+            return Parent.Match(
+                parent => parent.GetData(key)
+                    .Match(
+                        data => data.ToMaybe(),
+                        parent.GetDataFromParents(key)),
+                Maybe.Empty<object>());
+        }
+        
         public bool ClearData(string key)
         {
             if (_dataContext.ContainsKey(key))
@@ -62,26 +69,12 @@ namespace BehaviorTree
                 return true;
             }
 
-            Node node = parent;
-            while (node != null)
-            {
-                bool cleared = node.ClearData(key);
-
-                if (cleared)
-                    return true;
-
-                node = node.parent;
-            }
-
-            return false;
+            return ClearDataFromParents(key);
         }
-    }
 
-    public interface INode
-    {
-        NodeState Evaluate() => NodeState.Failure;
-        void SetData(string key, object value);
-        object GetData(string key);
-        bool ClearData(string key);
+        private bool ClearDataFromParents(string key)
+        {
+            return Parent.Match(parent => parent.ClearData(key), false);
+        }
     }
 }
